@@ -1,1 +1,15 @@
-// TODO
+.container{
+  position: absolute;
+  margin: 150px 300px;
+  padding: 0 2rem;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-content: space-between;
+
+
+  strong{
+    font-weight: 700;
+    font-size: 28px;
+  }
+}

@@ -1,5 +1,4 @@
 import { GetStaticProps } from 'next';
-import Head from 'next/head';
 
 import Link from 'next/link';
 import { useState } from 'react';
@@ -8,9 +7,9 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import Prismic from '@prismicio/client';
 import { getPrismicClient } from '../services/prismic';
-
+import Header from '../components/Header';
 // import commonStyles from '../styles/common.module.scss';
-// import styles from './home.module.scss';
+import styles from './home.module.scss';
 
 interface Post {
   uid?: string;
@@ -54,10 +53,8 @@ export default function Home({ postsPagination }: HomeProps) {
   }
   return (
     <>
-      <Head>
-        <img src="/images/logo.svg" alt="logo" />
-      </Head>
-      <div>
+      <Header />
+      <div className={styles.container}>
         {posts.map(post => (
           <Link href={`/post/${post.uid}`} key={post.uid}>
             <a>
@@ -79,10 +76,12 @@ export default function Home({ postsPagination }: HomeProps) {
           </Link>
         ))}
       </div>
-      {postsPagination.next_page && (
+      {postsPagination.next_page ? (
         <button type="button" onClick={getPosts}>
           Carregar mais posts
         </button>
+      ) : (
+        ' '
       )}
     </>
   );
@@ -94,7 +93,7 @@ export const getStaticProps: GetStaticProps = async () => {
     [Prismic.Predicates.at(' document.type', 'posts')],
     {
       fetch: ['post.title', 'post.content'],
-      pageSize: 20,
+      pageSize: 5,
     }
   );
   const posts = postsResponse.results.map(post => {
