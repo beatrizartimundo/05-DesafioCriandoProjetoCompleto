@@ -1,15 +1,22 @@
-.container{
-  position: absolute;
-  margin: 150px 300px;
-  padding: 0 2rem;
+.post {
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-content: space-around;
+    margin: 2.5rem 0;
 
-  display: grid;
-  grid-template-columns: 1fr;
-  justify-content: space-between;
+    strong {
+      font-weight: 700;
+      font-size: 1.75rem;
+    }
 
+    p {
+      margin: 1rem 0;
+    }
 
-  strong{
-    font-weight: 700;
-    font-size: 28px;
-  }
 }
+.footer {
+  display: flex;
+  flex-direction: row;
+  align-content: space-between;
+}
+
