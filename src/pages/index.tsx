@@ -8,7 +8,7 @@ import { ptBR } from 'date-fns/locale';
 import Prismic from '@prismicio/client';
 import { getPrismicClient } from '../services/prismic';
 import Header from '../components/Header';
-// import commonStyles from '../styles/common.module.scss';
+import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
 
 interface Post {
@@ -54,26 +54,34 @@ export default function Home({ postsPagination }: HomeProps) {
   return (
     <>
       <Header />
-      <div className={styles.container}>
+      <div className={commonStyles.container}>
         {posts.map(post => (
-          <Link href={`/post/${post.uid}`} key={post.uid}>
-            <a>
-              <strong>{post.data.title}</strong>
-              <p>{post.data.subtitle}</p>
-              <div>
-                <FiCalendar />
-                <time>
-                  {format(new Date(post.first_publication_date), 'dd/MM/yyyy', {
-                    locale: ptBR,
-                  })}
-                </time>
-              </div>
-              <div>
-                <FiUser />
-                <p>{post.data.author}</p>
-              </div>
-            </a>
-          </Link>
+          <div className={styles.post}>
+            <Link href={`/post/${post.uid}`} key={post.uid}>
+              <a>
+                <strong>{post.data.title}</strong>
+                <p>{post.data.subtitle}</p>
+                <div className={styles.footer}>
+                  <div>
+                    <FiCalendar />
+                    <time>
+                      {format(
+                        new Date(post.first_publication_date),
+                        'dd/MM/yyyy',
+                        {
+                          locale: ptBR,
+                        }
+                      )}
+                    </time>
+                  </div>
+                  <div>
+                    <FiUser />
+                    <span>{post.data.author}</span>
+                  </div>
+                </div>
+              </a>
+            </Link>
+          </div>
         ))}
       </div>
       {postsPagination.next_page ? (
