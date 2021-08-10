@@ -1,1 +1,41 @@
-// TODO
+.Image {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  margin:10rem 0 auto;
+}
+
+.container{
+  margin-top: 2rem;
+
+  strong {
+    font-size: 2.5rem;
+  }
+}
+
+.subtitle {
+  display: flex;
+  flex-direction: row;
+  margin: 1rem;
+
+  div {
+    margin-right: 1rem;
+    color: var(--gra-200);
+  }
+  time,
+  span {
+    margin-left: 0.5rem;
+  }
+}
+.post{
+  text-align: justify;
+  margin:2rem 0;
+
+  h2 {
+    margin: 2rem 0rem;
+    font-size: 1.5rem;
+  }
+  .postContent {
+    line-height: 1.5rem;
+  }
+}

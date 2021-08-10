@@ -55,8 +55,8 @@ export default function Home({ postsPagination }: HomeProps) {
     <>
       <Header />
       <div className={commonStyles.container}>
-        {posts.map(post => (
-          <div className={styles.post}>
+        <div className={styles.post}>
+          {posts.map(post => (
             <Link href={`/post/${post.uid}`} key={post.uid}>
               <a>
                 <strong>{post.data.title}</strong>
@@ -67,7 +67,7 @@ export default function Home({ postsPagination }: HomeProps) {
                     <time>
                       {format(
                         new Date(post.first_publication_date),
-                        'dd/MM/yyyy',
+                        'dd MMM yyyy',
                         {
                           locale: ptBR,
                         }
@@ -81,16 +81,16 @@ export default function Home({ postsPagination }: HomeProps) {
                 </div>
               </a>
             </Link>
-          </div>
-        ))}
+          ))}
+        </div>
+        {postsPagination.next_page ? (
+          <button className={styles.button} type="button" onClick={getPosts}>
+            Carregar mais posts
+          </button>
+        ) : (
+          ' '
+        )}
       </div>
-      {postsPagination.next_page ? (
-        <button type="button" onClick={getPosts}>
-          Carregar mais posts
-        </button>
-      ) : (
-        ' '
-      )}
     </>
   );
 }
@@ -98,10 +98,10 @@ export default function Home({ postsPagination }: HomeProps) {
 export const getStaticProps: GetStaticProps = async () => {
   const prismic = getPrismicClient();
   const postsResponse = await prismic.query(
-    [Prismic.Predicates.at(' document.type', 'posts')],
+    [Prismic.predicates.at(' document.type', 'posts')],
     {
       fetch: ['post.title', 'post.content'],
-      pageSize: 5,
+      pageSize: 20,
     }
   );
   const posts = postsResponse.results.map(post => {

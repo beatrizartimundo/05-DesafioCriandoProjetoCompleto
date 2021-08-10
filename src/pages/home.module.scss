@@ -1,22 +1,51 @@
 .post {
-    display: grid;
-    grid-template-columns: 1fr;
-    justify-content: space-around;
-    margin: 2.5rem 0;
+    max-width: 700px;
+    margin:10rem 0 auto;
+    // margin: 10rem 0;
 
-    strong {
+    a {
+      display: block;
+
+      &+a{
+        margin-top: 2rem;
+        padding-top: 0;
+      }
+
+      strong {
       font-weight: 700;
       font-size: 1.75rem;
     }
 
     p {
       margin: 1rem 0;
+      color:var(--gray-100);
+    }
     }
 
+
 }
+
+
 .footer {
   display: flex;
   flex-direction: row;
-  align-content: space-between;
+
+  div {
+    margin-right: 1rem;
+    color: var(--gra-200);
+  }
+  time,
+  span {
+    margin-left: 0.5rem;
+  }
+}
+
+.button {
+  margin-top: 2rem;
+  background: transparent;
+  color: var(--pink);
+  font-weight: 600;
+  font-size: 18px;
+  border: 0;
 }
 
