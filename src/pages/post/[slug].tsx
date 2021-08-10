@@ -8,6 +8,7 @@ import { ptBR } from 'date-fns/locale';
 import { FiCalendar, FiUser, FiClock } from 'react-icons/fi';
 import Prismic from '@prismicio/client';
 import Header from '../../components/Header';
+import Comments from '../../components/Comments';
 
 import { getPrismicClient } from '../../services/prismic';
 
@@ -16,6 +17,7 @@ import styles from './post.module.scss';
 
 interface Post {
   first_publication_date: string | null;
+  last_publication_date: string | null;
   data: {
     title: string;
     banner: {
@@ -91,6 +93,7 @@ export default function Post({ post }: PostProps) {
           </article>
         );
       })}
+      <Comments />
     </div>
   );
 }
@@ -117,8 +120,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { slug } = params;
+export const getStaticProps: GetStaticProps = async context => {
+  const { slug } = context.params;
   const prismic = getPrismicClient();
   const response = await prismic.getByUID('posts', String(slug), {});
 
