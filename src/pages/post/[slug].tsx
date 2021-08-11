@@ -54,6 +54,23 @@ export default function Post({ post }: PostProps) {
     return <div>Carregando...</div>;
   }
 
+  const lastDate = post.last_publication_date;
+
+  const isPostEdited = () => {
+    const postEdited = post.first_publication_date !== lastDate;
+    if (postEdited) {
+      const editionDate = format(
+        new Date(lastDate),
+        "'editado em' dd MMM yyyy",
+        {
+          locale: ptBR,
+        }
+      );
+      return editionDate;
+    }
+    return ' ';
+  };
+
   return (
     <div className={commonStyles.container}>
       <Header />
@@ -78,6 +95,7 @@ export default function Post({ post }: PostProps) {
             <span>{`${timeToRead} min`}</span>
           </div>
         </div>
+        <span>{isPostEdited()}</span>
       </div>
       {post.data.content.map(content => {
         return (
@@ -128,6 +146,7 @@ export const getStaticProps: GetStaticProps = async context => {
   const post = {
     uid: response.uid,
     first_publication_date: response.first_publication_date,
+    last_publication_date: response.last_publication_date,
     data: {
       title: response.data.title,
       subtitle: response.data.subtitle,

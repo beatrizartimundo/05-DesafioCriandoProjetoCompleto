@@ -1,7 +1,7 @@
-import { Component } from 'react';
+import { useEffect } from 'react';
 
-export default class Comments extends Component {
-  componentDidMount() {
+export default function Comments() {
+  useEffect(() => {
     const script = document.createElement('script');
     const anchor = document.getElementById('inject-comments-for-uterances');
     script.setAttribute('src', 'https://utteranc.es/client.js');
@@ -14,14 +14,9 @@ export default class Comments extends Component {
     script.setAttribute('issue-term', 'pathname');
     script.setAttribute('theme', 'dark-blue');
     anchor.appendChild(script);
-  }
+  }, []);
 
-  render() {
-    return (
-      <div
-        id="inject-comments-for-uterances"
-        style={{ marginBottom: '4rem' }}
-      />
-    );
-  }
+  return (
+    <div id="inject-comments-for-uterances" style={{ marginBottom: '4rem' }} />
+  );
 }
