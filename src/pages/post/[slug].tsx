@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { FiCalendar, FiUser, FiClock } from 'react-icons/fi';
 import Prismic from '@prismicio/client';
+import Link from 'next/link';
 import Header from '../../components/Header';
 import Comments from '../../components/Comments';
 
@@ -36,9 +37,28 @@ interface Post {
 
 interface PostProps {
   post: Post;
+  preview: boolean;
+  navigation: {
+    prevPost: {
+      uid: string;
+      data: {
+        title: string;
+      };
+    }[];
+    nextPost: {
+      uid: string;
+      data: {
+        title: string;
+      };
+    }[];
+  };
 }
 
-export default function Post({ post }: PostProps) {
+export default function Post({
+  post,
+  preview,
+  navigation,
+}: PostProps): JSX.Element {
   const router = useRouter();
 
   const minutes = post.data.content.reduce((total, contentItem) => {
@@ -111,7 +131,33 @@ export default function Post({ post }: PostProps) {
           </article>
         );
       })}
+      <section className={styles.navigation}>
+        {navigation?.prevPost.length > 0 && (
+          <div>
+            <h3>{navigation.prevPost[0].data.title}</h3>
+            <Link href={`/post/${navigation.prevPost[0].uid}`}>
+              <a>Post anterior</a>
+            </Link>
+          </div>
+        )}
+
+        {navigation?.nextPost.length > 0 && (
+          <div>
+            <h3>{navigation.nextPost[0].data.title}</h3>
+            <Link href={`/post/${navigation.nextPost[0].uid}`}>
+              <a>Próximo post</a>
+            </Link>
+          </div>
+        )}
+      </section>
       <Comments />
+      {preview && (
+        <aside className={commonStyles.preview}>
+          <Link href="/api/exit-preview">
+            <a>Sair do modo Preview</a>
+          </Link>
+        </aside>
+      )}
     </div>
   );
 }
@@ -138,10 +184,34 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = async context => {
-  const { slug } = context.params;
+export const getStaticProps: GetStaticProps = async ({
+  params,
+  preview = false,
+  previewData,
+}) => {
   const prismic = getPrismicClient();
-  const response = await prismic.getByUID('posts', String(slug), {});
+  const { slug } = params;
+  const response = await prismic.getByUID('posts', String(slug), {
+    ref: previewData?.ref || null,
+  });
+
+  const prevPost = await prismic.query(
+    [Prismic.Predicates.at('document.type', 'posts')],
+    {
+      pageSize: 1,
+      after: response.id,
+      orderings: '[document.first_publication_date]',
+    }
+  );
+
+  const nextPost = await prismic.query(
+    [Prismic.Predicates.at('document.type', 'posts')],
+    {
+      pageSize: 1,
+      after: response.id,
+      orderings: '[document.last_publication_date desc]',
+    }
+  );
 
   const post = {
     uid: response.uid,
@@ -161,6 +231,12 @@ export const getStaticProps: GetStaticProps = async context => {
   return {
     props: {
       post,
+      preview,
+      navigation: {
+        prevPost: prevPost?.results,
+        nextPost: nextPost?.results,
+      },
     },
+    revalidate: 60 * 60 * 24,
   };
 };

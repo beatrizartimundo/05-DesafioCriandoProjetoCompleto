@@ -48,4 +48,14 @@
   font-size: 18px;
   border: 0;
 }
-
+.preview {
+  margin-top: 2rem;
+  background:(var(--gray-100));
+  width: 200px;
+  padding: 5px;
+  color: var(--pink);
+  font-weight: 600;
+  font-size: 18px;
+  border: 2;
+  border-radius: 10px;
+}
